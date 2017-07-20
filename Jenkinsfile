@@ -2,7 +2,7 @@ node {
 //  def deploy = env.Environment
    stage('Code Checkout') { // for display purposes
       // Get some code from a GitHub repository
-      git branch: 'demo', url: 'git@github.com:rsravanam/jenkinsipeline.git'
+      git branch: 'blueocean', url: 'https://github.com/rsravanam/BlueOcean.git'
       // Get the Maven tool.
       // ** NOTE: This 'M3' Maven tool must be configured
       // **       in the global configuration.           
