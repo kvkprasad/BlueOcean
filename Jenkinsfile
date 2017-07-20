@@ -2,7 +2,7 @@ node {
 //  def deploy = env.Environment
    stage('Code Checkout') { // for display purposes
       // Get some code from a GitHub repository
-      git branch: 'demo', url: 'git@github.com:rsravanam/jenkinsipeline.git'
+      git branch: 'blueocean', url: 'https://github.com/rsravanam/BlueOcean.git'
       // Get the Maven tool.
       // ** NOTE: This 'M3' Maven tool must be configured
       // **       in the global configuration.           
@@ -10,7 +10,7 @@ node {
    }
    stage('Build') {
    
-		dir('maven-hello-world-master-snapshot') {
+		dir('maven-hello-world-master-release') {
 		    // Run the maven build
 			if (isUnix()) {
 			sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean install compile"
@@ -22,7 +22,7 @@ node {
    }
    stage('Test') {
    
-		dir('maven-hello-world-master-snapshot') {
+		dir('maven-hello-world-master-release') {
 		    // Run the maven build
 			if (isUnix()) {
 				sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore compile test"
@@ -33,14 +33,14 @@ node {
    }  
    stage('Results') {
    
-		dir('maven-hello-world-master-snapshot') {		    
+		dir('maven-hello-world-master-release') {		    
 			junit '**/target/surefire-reports/TEST-*.xml'
 			archive 'target/*.jar'
 		}
 	}
     stage('Artifacts') {
    
-		dir('maven-hello-world-master-snapshot') {
+		dir('maven-hello-world-master-release') {
 		    // Run the maven build
 			if (isUnix()) {
 				sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
