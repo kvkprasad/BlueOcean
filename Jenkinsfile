@@ -10,7 +10,7 @@ node {
    }
    stage('Build') {
    
-		dir('maven-hello-world-master-snapshot') {
+		dir('maven-hello-world-master-release') {
 		    // Run the maven build
 			if (isUnix()) {
 			sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean install compile"
@@ -22,7 +22,7 @@ node {
    }
    stage('Test') {
    
-		dir('maven-hello-world-master-snapshot') {
+		dir('maven-hello-world-master-release') {
 		    // Run the maven build
 			if (isUnix()) {
 				sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore compile test"
@@ -33,14 +33,14 @@ node {
    }  
    stage('Results') {
    
-		dir('maven-hello-world-master-snapshot') {		    
+		dir('maven-hello-world-master-release') {		    
 			junit '**/target/surefire-reports/TEST-*.xml'
 			archive 'target/*.jar'
 		}
 	}
     stage('Artifacts') {
    
-		dir('maven-hello-world-master-snapshot') {
+		dir('maven-hello-world-master-release') {
 		    // Run the maven build
 			if (isUnix()) {
 				sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
