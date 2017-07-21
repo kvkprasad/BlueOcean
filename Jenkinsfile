@@ -11,42 +11,43 @@ node('master') {
    }
    
    stage('Build') {
-	
-	    stage('Clean') {
-	    	dir('maven-hello-world-master-release') {
-	    	    // Run the maven build
-	    		if (isUnix()) {
-	    		sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean"
-	    		} else {
-	    		// bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore clean/)
-	    		echo "check out done"
-	    		}
-	    	}	
-	    }
-		
-		stage('Install') {
-	    	dir('maven-hello-world-master-release') {
-	    	    // Run the maven build
-	    		if (isUnix()) {
-	    		sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore install"
-	    		} else {
-	    		// bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore install/)
-	    		echo "check out done"
-	    		}
-	    	}	
-	    }
-
-		stage('Compile') {
-	    	dir('maven-hello-world-master-release') {
-	    	    // Run the maven build
-	    		if (isUnix()) {
-	    		sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore compile"
-	    		} else {
-	    		// bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore compile/)
-	    		echo "check out done"
-	    		}
-	    	}	
-	    }		
+	    parallel (
+	        "Clean": {
+	        	dir('maven-hello-world-master-release') {
+	        	    // Run the maven build
+	        		if (isUnix()) {
+	        		sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean"
+	        		} else {
+	        		// bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore clean/)
+	        		echo "check out done"
+	        		}
+	        	}	
+	        },
+	    	
+	    	"Install": {
+	        	dir('maven-hello-world-master-release') {
+	        	    // Run the maven build
+	        		if (isUnix()) {
+	        		sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore install"
+	        		} else {
+	        		// bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore install/)
+	        		echo "check out done"
+	        		}
+	        	}	
+	        },
+        
+	    	"Compile": {
+	        	dir('maven-hello-world-master-release') {
+	        	    // Run the maven build
+	        		if (isUnix()) {
+	        		sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore compile"
+	        		} else {
+	        		// bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore compile/)
+	        		echo "check out done"
+	        		}
+	        	}	
+	        },	
+	    )
    }
    
    stage('Test') {
