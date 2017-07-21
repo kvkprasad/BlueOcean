@@ -1,4 +1,5 @@
-node {
+node('master') {
+
 //  def deploy = env.Environment
    stage('Code Checkout') { // for display purposes
       // Get some code from a GitHub repository
@@ -8,37 +9,67 @@ node {
       // **       in the global configuration.           
       // mvnHome = tool 'M3'
    }
-   stage('Build') {
    
-		dir('maven-hello-world-master-release') {
-		    // Run the maven build
-			if (isUnix()) {
-			sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean install compile"
-			} else {
-			// bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore clean install compile/)
-			echo "check out done"
-			}
-		}
+   stage('Build') {
+	
+	    stage('Clean') {
+	    	dir('maven-hello-world-master-release') {
+	    	    // Run the maven build
+	    		if (isUnix()) {
+	    		sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean"
+	    		} else {
+	    		// bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore clean/)
+	    		echo "check out done"
+	    		}
+	    	}	
+	    }
+		
+		stage('Install') {
+	    	dir('maven-hello-world-master-release') {
+	    	    // Run the maven build
+	    		if (isUnix()) {
+	    		sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore install"
+	    		} else {
+	    		// bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore install/)
+	    		echo "check out done"
+	    		}
+	    	}	
+	    }
+
+		stage('Compile') {
+	    	dir('maven-hello-world-master-release') {
+	    	    // Run the maven build
+	    		if (isUnix()) {
+	    		sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore compile"
+	    		} else {
+	    		// bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore compile/)
+	    		echo "check out done"
+	    		}
+	    	}	
+	    }		
    }
+   
    stage('Test') {
    
 		dir('maven-hello-world-master-release') {
 		    // Run the maven build
 			if (isUnix()) {
-				sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore compile test"
+				sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore test"
 			} else {
-				bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore compile test/)
+				bat(/"D:\Maven_339\apache-maven-3.3.9\bin\mvn" -Dmaven.test.failure.ignore test/)
 			}
 		}
-   }  
-   stage('Results') {
+   } 
+   
+   stage('Test Results') {
    
 		dir('maven-hello-world-master-release') {		    
 			junit '**/target/surefire-reports/TEST-*.xml'
 			archive 'target/*.jar'
 		}
 	}
-    stage('Artifacts') {
+	
+    stage('Prepare Artifacts') {
    
 		dir('maven-hello-world-master-release') {
 		    // Run the maven build
